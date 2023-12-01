@@ -2,27 +2,31 @@ package entity;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class Main {
 
-    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
-
-    public static List<Items> getTable(EntityManager em){
-        Query q = em.createNamedQuery("getTable" , Items.class);
+    //function to get list of items from database
+    public static List<Items> getTable(EntityManager em) {
+        //create query (getTable is a named query in Items.java)
+        Query q = em.createNamedQuery("getTable", Items.class);
+        //get result list and return
         List<Items> result = (List<Items>) q.getResultList();
-        LOGGER.info("Items list retrieved, size: " + (result == null ? "null" : result.size()));
-
         return result;
     }
 
-    public static void printTable(EntityManager em){
-        Query q = em.createNamedQuery("getTable" , Items.class);
+    //function to display table
+    public static void printTable(EntityManager em) {
+        //create query (getTable is a named query in Items.java)
+        Query q = em.createNamedQuery("getTable", Items.class);
+        //get result list
         List<Items> result = (List<Items>) q.getResultList();
-        if(result.isEmpty()){
+        //if list is empty, print message
+        if (result.isEmpty()) {
             System.out.println("No items in table");
             System.out.println();
         }
+        //otherwise, for each item in the result list, print item details
         for (Items item : result) {
             System.out.println(item.getItemId() + " : " + item.getItemName());
             System.out.println("Desc: " + item.getItemDescription());
@@ -31,122 +35,43 @@ public class Main {
         }
     }
 
-    public static void delFromTable(EntityManager em, int idx){
-
+    //function to delete from table
+    public static void delFromTable(EntityManager em, int idx) {
+        //create query
         Query q = em.createNativeQuery("DELETE FROM Items WHERE itemID = ?1");
+        //set parameter
         q.setParameter(1, idx);
+        //execute query
         q.executeUpdate();
     }
 
-    public static void addToTable(EntityManager em, String name, String desc){
+    //function to delete from table maliciously
+//    public static void delFromTableMalicious(EntityManager em, String idx) {
+//        //create query (but pass in the string directly)
+//        Query q = em.createNativeQuery("DELETE FROM Items WHERE itemID = " + idx);
+//        //execute query
+//        q.executeUpdate();
+//    }
+
+    //function to add to table
+    public static void addToTable(EntityManager em, String name, String desc) {
+        //create query
         Query q = em.createNativeQuery("INSERT INTO Items (itemName, itemDescription, isDone) VALUES (?1, ?2, 0)");
+        //set parameters
         q.setParameter(1, name);
         q.setParameter(2, desc);
+        //execute query
         q.executeUpdate();
     }
 
-    public static void updateIsDone(EntityManager em, int idx){
-
+    //function to update item in table to completed
+    public static void updateIsDone(EntityManager em, int idx) {
+        //create query
         Query q = em.createNativeQuery("UPDATE Items p SET p.isDone = 1 WHERE p.itemID = ?1");
+        //set parameter
         q.setParameter(1, idx);
+        //execute query
         q.executeUpdate();
-
     }
-
-    public static void main(String[] args) {
-//
-//        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        EntityTransaction transaction = entityManager.getTransaction();
-//
-//
-//        boolean isExit = false;
-//        int choice;
-//        Scanner scanner = new Scanner(System.in);
-//        while (!isExit) {
-//            displayMenu();
-//            choice = getChoice(scanner);
-//            switch (choice) {
-//                case 1:
-//                    //ADD TODO ITEM
-//                    try {
-//                        transaction.begin();
-//                        //get item name and description
-//                        System.out.println("Enter item name: ");
-//                        String itemName = scanner.nextLine();
-//                        System.out.println("Enter item description: ");
-//                        String itemDescription = scanner.nextLine();
-//                        //set item name and description
-//                        addToTable(entityManager, itemName, itemDescription);
-//
-//                        //TypedQuery<Employee> empByDeptQuery = entityManager.createNamedQuery("Employee.byDept", Employee.class);
-//
-//                        transaction.commit();
-//                    } finally {
-//                        if (transaction.isActive()) {
-//                            transaction.rollback();
-//                        }
-//
-//                    }
-//                    break;
-//                case 2:
-//                    //DELETE TODO ITEM
-//                    try{
-//                        transaction.begin();
-//                        printTable(entityManager);
-//                        System.out.println("Enter item ID to delete: ");
-//                        int itemId = scanner.nextInt();
-//                        scanner.nextLine();
-//                        delFromTable(entityManager, itemId);
-//                    } finally {
-//                        if (transaction.isActive()) {
-//                            transaction.rollback();
-//                        }
-//
-//                    }
-//                    break;
-//                case 3:
-//                    //VIEW TODO ITEMS
-//                    try{
-//                        transaction.begin();
-//                        printTable(entityManager);
-//                        transaction.commit();
-//                    } finally {
-//                        if (transaction.isActive()) {
-//                            transaction.rollback();
-//                        }
-//                    }
-//                    break;
-//                case 4:
-//                    //MARK TODO ITEM AS DONE
-//                    try{
-//                        transaction.begin();
-//                        printTable(entityManager);
-//                        System.out.println("Enter item ID to mark as done: ");
-//                        int itemId = scanner.nextInt();
-//                        scanner.nextLine();
-//                        updateIsDone(entityManager, itemId);
-//                        transaction.commit();
-//                    } finally {
-//                        if (transaction.isActive()) {
-//                            transaction.rollback();
-//                        }
-//
-//                    }
-//                    break;
-//                case 5:
-//                    //EXIT
-//                    isExit = true;
-//                    break;
-//                default:
-//                    System.out.println("Invalid choice");
-//            }
-//
-//        }
-//
-//
-//        entityManager.close();
-//        entityManagerFactory.close();
-   }
 
 }

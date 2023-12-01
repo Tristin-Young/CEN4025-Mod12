@@ -6,12 +6,14 @@ import java.util.Objects;
 @Entity
 @NamedQuery(name = "getTable", query = "SELECT p FROM Items p")
 
+//entity class for table items
 public class Items {
     private int itemId;
     private String itemName;
     private String itemDescription;
     private byte isDone;
 
+    //constructors
     @Id
     @Column(name = "itemID")
     public int getItemId() {

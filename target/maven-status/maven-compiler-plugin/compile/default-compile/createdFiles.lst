@@ -1,3 +1,8 @@
 entity\Main.class
-entity\TodoListServlet.class
+entity\RootServlet.class
+entity\UpdateServlet.class
+entity\DeleteServlet.class
 entity\Items.class
+entity\HelperServletFunctions.class
+entity\IndexServlet.class
+entity\AddServlet.class
